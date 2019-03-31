@@ -1,0 +1,48 @@
+/* btn */
+$btn-sure-color: #FFF;
+$btn-sure-bg: #5cb85c;
+$btn-sure-bd: #4cae4c;
+$btn-error-color: #FFF;
+$btn-error-bg: #d9534f;
+$btn-error-bd: #d43f3a;
+
+@mixin btn-base($color, $bg-color, $bd-color) {
+    padding: 12px 20px;
+    color: $color;
+    border: 1px solid $bd-color;
+    border-radius: 4px;
+    background-color: $bg-color;
+    background-image: none;
+    outline: 0;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    display: inline-block;
+
+    &:hover {
+        color: $color;
+        border-color: darken($bd-color, 10%);
+        background-color: darken($bg-color, 10%);
+    }
+
+    &.disabled,
+    &[disabled] {
+        color: $color;
+        border: 1px solid $bd-color;
+        background-color: $bg-color;
+        cursor: not-allowed;
+    }
+}
+
+.btn-sure {
+    width: auto;
+    @include btn-base($btn-sure-color, $btn-sure-bg, $btn-sure-bd);
+}
+
+.btn-error {
+    width: auto;
+    @include btn-base($btn-error-color, $btn-error-bg, $btn-error-bd);
+}
+
+/* btn */

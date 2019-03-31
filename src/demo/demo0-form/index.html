@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>登录</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="style/index.css" />
+  <script src="../js/vue.min.js"></script>
+</head>
+
+<body>
+  <div id="login-form" class="login">
+    <p>
+      <label>帐号：</label>
+      <input v-model="UserName" name="UserName" type="text" placeholder="请输入帐号" />
+    </p>
+    <p>
+      <label>密码：</label>
+      <input v-model="UserPwd" name="UserPwd" type="password" placeholder="请输入密码" />
+    </p>
+    <p>
+      <button v-on:click="login">登录</button>
+      <button v-on:click="reset">重置</button>
+    </p>
+  </div>
+  <script>
+    var loginApp = new Vue({
+      el: '#login-form',
+      data: {
+        UserName: 'admin',
+        UserPwd: '123456'
+      },
+      methods: {
+        login: function () {
+          if (this.UserName == 'admin' && this.UserPwd == '123456') {
+            window.location.href = '../demo1-table/index.html';
+          } else {
+            alert('failure');
+          }
+        },
+        reset: function () {
+          this.UserName = '';
+          this.UserPwd = '';
+        }
+      }
+    });
+
+  </script>
+</body>
+
+</html>
+

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>vue-template</title>
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+</head>
+
+<body>
+  <div id="todo-list-example">
+    <base-input v-bind="baseInput" class="add-input" placeholder="Add a todo" title="Add a todo" v-on:add-event="addNewTodo"></base-input>
+    <ul>
+      <li is="todo-item" v-for="(todo, index) in todos" v-bind:key="todo.id" v-bind:id="todo.id" v-bind:title="todo.title" v-on:remove="todos.splice(index, 1)"></li>
+    </ul>
+  </div>
+  <script>
+    Vue.component('todo-item', {
+      template: `
+        <li v:bind:id="id">
+          {{ title }}
+          <button v-on:click="$emit(\'remove\')">X</button>
+        </li>
+        `,
+      props: {
+        id: {
+          type: Number,
+          required: true
+        },
+        title: {
+          type: [Number, String],
+          default: '空'
+        }
+      }
+    });
+    var baseInput = {
+      inheritAttrs: false, //禁用特性(title，placeholder等，class不是)继承，$attrs指定
+      props: ['label', 'value'],
+      template: `
+        <label>
+          {{ label }}
+          <input
+            v-bind="$attrs"
+            v-bind:value="value"
+            v-on:keyup.enter="$emit(\'add-event\', $event.target.value)">
+        </label>
+        `
+        .trim()
+    };
+
+    new Vue({
+      el: '#todo-list-example',
+      components: {
+        'base-input': baseInput
+      },
+      data: {
+        baseInput: {
+          label: '请输入值并按回车：',
+          value: ''
+        },
+        todos: [{
+            id: 1,
+            title: 'Do the dishes',
+          },
+          {
+            id: 2,
+            title: 'Take out the trash',
+          },
+          {
+            id: 3
+          }
+        ],
+        nextTodoId: 4
+      },
+      methods: {
+        addNewTodo: function (value) {
+          this.todos.push({
+            id: this.nextTodoId++,
+            title: value
+          });
+        }
+      }
+    });
+
+  </script>
+</body>
+
+</html>
+

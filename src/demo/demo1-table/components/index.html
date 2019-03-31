@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>动态信用评价_列表</title>
+    <link href="index.css" rel="stylesheet" />
+    <link href="iconfont.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/vue.min.js"></script>
+    <script src="table.vue.js"></script>
+</head>
+
+<body>
+    <div id="info-lst">
+        <div class="dtxypj-info">
+            <template v-for="(item,index) in infos">
+                <base-table v-bind:info="item" v-bind:iconarr="[iconCls.icon, item.show ? iconCls.up:iconCls.down]" v-on:showfunc="showInfo(index,$event)"></base-table>
+            </template>
+        </div>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#info-lst',
+            components: {
+                'base-table': baseTable
+            },
+            data: {
+                iconCls: {
+                    icon: 'iconfont',
+                    up: 'icon-arrow-up',
+                    down: 'icon-arrow-down'
+                },
+                infos: [
+                    {
+                        type: 'Y_1', title: '承揽项目', show: true, score: 0,
+                        thead: ['序号', '工程名称', '中标金额(万元)', '信息登载日期', '评价得分', '评价有效期', '评价起计日期', '评价结束日期'],
+                        field: ['RN', 'COL2', 'COL6', 'UPDATE_TIME', 'SCORE', 'DATETIME_SPAN', 'S_DATE', 'E_DATE'],
+                        tbody: [
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' },
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' },
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' },
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' }
+                        ]
+                    },
+                    {
+                        type: 'Y_2', title: '履约评价', show: true, score: 0,
+                        thead: ['序号', '项目名称', '履约评价等级', '信息登载日期', '评价得分', '评价有效期', '评价起计日期', '评价结束日期'],
+                        field: ['RN', 'COL3', 'COL12', 'UPDATE_TIME', 'SCORE', 'DATETIME_SPAN', 'S_DATE', 'E_DATE'],
+                        tbody: [
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' },
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' },
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' },
+                            { RN: 1, COL2: '四创软件', COL6: 100, UPDATE_TIME: '2018-07-16', SCORE: 30, DATETIME_SPAN: 7, S_DATE: '2018-07-16', E_DATE: '2018-07-16' }
+                        ]
+                    }
+                ]
+            },
+            methods: {
+                showInfo: function (index, title) {
+                    var _this = this;
+                    alert(title);
+                    _this.infos[index].show = !_this.infos[index].show;
+                    //_this.infos[index].icon = _this.infos[index].show ? 'icon-arrow-up' : 'icon-arrow-down';
+                },
+                ajax: function () {
+                    var _this = this;
+                    var _Ajax = __JsUtil.AjaxFunc("/Handler/ActionScoreInfoHandler.ashx", true);
+                    _Ajax({ flag: 'GetInfoByList', CID: 121 }, function (jsons) {
+                        _this.init(jsons);
+                    });
+                },
+                init: function (jsons) {
+                    var _this = this;
+                    _this.baseInfo.CName = jsons.CName;
+                    _this.baseInfo.SumScore = jsons.SumScore;
+                    _this.baseInfo.BaseScore = jsons.BaseScore;
+                    _this.baseInfo.GoodScore = jsons.GoodScore;
+                    _this.baseInfo.BadScore = jsons.BadScore;
+
+                    for (var i = 0, len = _this.infos.length; i < len; i++) {
+                        var key = _this.infos[i].type;
+                        _this.infos[i].tbody = jsons.List[key];
+                    }
+                }
+            },
+            mounted: function () {
+                //this.ajax();
+            }
+        });
+    </script>
+</body>
+
+</html>

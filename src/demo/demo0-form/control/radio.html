@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>control-radio</title>
+  <script type="text/javascript" src="../../js/vue.min.js"></script>
+</head>
+
+<body>
+  <div id="control-radio">
+    <strong>v-bind:value 绑定非字符串类型，数值或对象等等</strong><br/><br/>
+
+    <label>
+      <input type="radio" v-model="pickObj" v-bind:value="{ number: 888 }">对象类型
+    </label>
+    <p>你的选择[pickObj]：{{pickObj}}</p>
+    <p>你的选择[pickObj.number]：{{pickObj.number}}</p>
+
+    <label>
+      <input type="radio" v-model="pick" v-bind:value="rdPick1">16数值类型
+    </label>
+    <label>
+      <input type="radio" v-model="pick" v-bind:value="rdPick2">18数值类型
+    </label>
+    <p>你的选择金额：{{pick}}</p>
+
+    <label>
+      <input v-model="picked" value="男" type="radio" />男字符串
+    </label>
+    <label>
+      <input v-model="picked" value="女" type="radio" />女字符串
+    </label>
+    <p>你的性别：{{picked}}</p>
+    <button v-on:click="showInfo">查看信息</button>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#control-radio',
+      data: {
+        rdPick1: 16,
+        rdPick2: 18,
+        pickObj: '',
+        pick: '',
+        picked: ''
+      },
+      methods: {
+        showInfo: function () {
+          let content = `
+            picked:${this.picked}
+            `
+            .trim();
+          alert(content);
+        }
+      }
+    });
+
+  </script>
+</body>
+
+</html>
+

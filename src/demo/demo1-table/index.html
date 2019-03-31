@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>form-table</title>
+  <link href="style/index.css" rel="stylesheet" />
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+</head>
+
+<body>
+  <div id="table">
+    <div class="add">
+      <input type="text" v-model="addDetail.title" name="title" placeholder="标题" />
+      <input type="text" v-model.trim="addDetail.user" name="user" placeholder="发布人" />
+      <input type="date" v-model="addDetail.dates" name="date" placeholder="发布时间" />
+      <button v-on:click="adddetail">新增</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>标题</th>
+          <th>发布人</th>
+          <th>发布时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item,index) in newsList">
+          <td width="5%">{{index+1}}</td>
+          <td>{{item.title}}</td>
+          <td width="10%">{{item.user}}</td>
+          <td width="15%">{{item.dates}}</td>
+          <td width="10%">
+            <span @click="deletelist(item.id,index)" class="delete">删除</span>
+            <span @click="edit(item)" class="edit">编辑</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="mask" v-if="editlist">
+      <div class="mask">
+        <div class="title">
+          编辑
+          <span @click="editlist=false">
+            X
+          </span>
+        </div>
+        <div class="content">
+          <input type="text" v-model.trim="editDetail.title" name="title" placeholder="标题" />
+          <input type="text" v-model.trim="editDetail.user" name="user" placeholder="发布人" />
+          <input type="date" v-model="editDetail.dates" name="date" placeholder="发布时间" />
+          <button @click="update">更新</button>
+          <button @click="editlist=false">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var app = new Vue({
+      el: '#table',
+      data: {
+        addDetail: {},
+        editlist: false,
+        editDetail: {},
+        newsList: [{
+          title: '在移动设备开发',
+          user: '张若昀',
+          dates: '2018-02-09',
+          id: "45211546"
+        }, {
+          title: '图形及特效特性',
+          user: '张若昀',
+          dates: '2018-02-09',
+          id: "61341341"
+        }, {
+          title: '设备兼容特性',
+          user: '张若昀',
+          dates: '2018-02-09',
+          id: "62451431"
+        }, {
+          title: 'W3C将致力于开发用于实时通信',
+          user: '张若昀',
+          dates: '2018-02-09',
+          id: "62345213"
+        }, {
+          title: '全新的表单输入对象',
+          user: '张若昀',
+          dates: '2018-02-09',
+          id: "23322445"
+        }],
+        editid: ''
+      },
+      mounted: function () {
+
+      },
+      methods: {
+        //新增
+        adddetail: function () {
+          //这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
+          //this.newsList.push(this.addDetail)
+          this.newsList.push({
+            title: this.addDetail.title,
+            user: this.addDetail.user,
+            dates: this.addDetail.dates,
+          });
+
+          //axios.post('url',this.addDetail).then((res) =>{
+          //若返回正确结果，清空新增输入框的数据
+          //this.addDetail.title = "";
+          //this.addDetail.user = "";
+          //this.addDetail.dates = "";
+          //});
+        },
+        //删除
+        deletelist: function (id, i) {
+          this.newsList.splice(i, 1);
+          //这边可以传id给服务端进行删除  ID = id
+          //axios.get('url',{ID:id}).then((res) =>{
+          //			加载列表
+          //})
+        },
+        //编辑
+        edit: function (item) {
+          this.editDetail = {
+            title: item.title,
+            user: item.user,
+            dates: item.dates,
+            id: item.id
+          };
+          this.editlist = true;
+          this.editid = item.id;
+        },
+        //确认更新
+        update: function () {
+          //编辑的话，也是传id去服务端
+          //axios.get('url',{ID:id}).then((res) =>{
+          //			加载列表
+          //});
+          var _this = this;
+          for (var i = 0; i < _this.newsList.length; i++) {
+            if (_this.newsList[i].id == this.editid) {
+              _this.newsList[i] = {
+                title: _this.editDetail.title,
+                user: _this.editDetail.user,
+                dates: _this.editDetail.dates,
+                id: this.editid
+              }
+              this.editlist = false;
+              break;
+            }
+          }
+        }
+      }
+    })
+
+  </script>
+</body>
+
+</html>

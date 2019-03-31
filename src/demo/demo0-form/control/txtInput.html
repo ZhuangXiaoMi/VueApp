@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>control-txtInput</title>
+  <script type="text/javascript" src="../../js/vue.min.js"></script>
+</head>
+
+<body>
+  <div id="control-txtInput">
+    <strong>v-model.lazy 在“change”时而非“input”时更新；“change”输入之后，鼠标点击其他位置值改变</strong><br/>
+    <strong>v-model.trim 自动过滤首尾空白字符</strong><br/><br/>
+
+    <p>
+      <textarea v-model.lazy.trim="textareaMsg" placeholder="add multiple lines"></textarea>
+    </p>
+    <p>多行文本框：{{textareaMsg}}</p>
+
+    <p>
+      请输入数值：
+      <input v-model.number="txtNumber" type="text" /> v-model.number，有缺陷空时第一次输入字符
+    </p>
+    <p>数值字符无效：{{txtNumber}}</p>
+
+    <p>
+      html输入框：
+      <input v-bind:value="txtHtml" v-on:input="txtHtml=$event.target.value" type="text" />
+    </p>
+    <p>html输入框：{{txtHtml}}</p>
+
+    <p>
+      html输入框：
+      <input v-model="txtHtml" type="text" />
+    </p>
+    <p v-if="txtHtml!=''">html输入框[v-if高切换开销]：{{txtHtml}}</p>
+
+    <p>
+      pack输入框：
+      <base-text v-model="txtPack"></base-text> (v-model="txtPack") / (v-bind:value="txtPack" v-on:input="txtPack=$event")
+    </p>
+    <p v-show="txtPack!=''">pack输入框[v-show高初始渲染开销]：{{txtPack}}</p>
+
+    <button v-on:click="showInfo">查看信息</button>
+  </div>
+  <script>
+    var baseText = {
+      props: ['value'],
+      //必须代码(v-on:input="$emit('input', $event.target.value)")用于绑定v-model
+      template: `
+        <input
+          v-bind:value="value"
+          v-on:input="$emit('input', $event.target.value)"
+        >
+        `
+    };
+
+    var vm = new Vue({
+      el: '#control-txtInput',
+      components: {
+        'base-text': baseText
+      },
+      data: {
+        textareaMsg: '',
+        txtNumber: 0,
+        txtHtml: '',
+        txtPack: ''
+      },
+      methods: {
+        showInfo: function () {
+          let content =
+            `
+            textareaMsg:${this.textareaMsg}\n txtHtml:${this.txtHtml}\n txtPack:${this.txtPack}
+            `
+            .trim();
+          alert(content);
+        }
+      }
+    });
+
+  </script>
+</body>
+
+</html>
+
